@@ -1,10 +1,14 @@
+#include <iostream>
+#include <string>
+
 #include "Test.h"
 #include "Node.h"
+#include "Tools.h"
 
-float TempTest(float vals[])
+float TempTest(std::vector<float> vals)
 {
 	float sum = 0;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < vals.size(); i++)
 	{
 		sum += vals[i];
 	}
@@ -14,9 +18,9 @@ float TempTest(float vals[])
 int main()
 {
 	Node node(TempTest);
-
-	node.inputs = { 1, 4, 3, 2 };
-	node.CallActivationFunction();
+	float test[] = { 1.0f, 4.0f, 3.0f, 5.0f };
+	node.SetInputs(ArrayToVector(test, 4));
+	std::cout << std::to_string(node.CallActivationFunction());
 
 	return 0;
 }

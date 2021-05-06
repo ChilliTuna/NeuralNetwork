@@ -3,14 +3,16 @@
 
 #include <vector>
 
-typedef float (*ActivationFunction)(float[]);
+typedef float (*ActivationFunction)(std::vector<float>);
 
 class Node
 {
 	ActivationFunction actFunc = nullptr;
-public:
 
 	std::vector<float> inputs;
+
+public:
+
 	float output;
 
 	Node() {}
@@ -19,6 +21,8 @@ public:
 		SetActivationFunction(function);
 	}
 
+	API void SetInputs(std::vector<float> in);
+	
 	API void SetActivationFunction(ActivationFunction function);
 
 	API float CallActivationFunction();
