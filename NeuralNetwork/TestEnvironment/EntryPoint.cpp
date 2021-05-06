@@ -2,25 +2,21 @@
 #include <string>
 
 #include "Test.h"
-#include "Node.h"
-#include "Tools.h"
+#include "Neuron.h"
 
-float TempTest(std::vector<float> vals)
+float TempTest(float in)
 {
-	float sum = 0;
-	for (int i = 0; i < vals.size(); i++)
-	{
-		sum += vals[i];
-	}
-	return sum;
+	return in * 10;
 }
 
 int main()
 {
-	Node node(TempTest);
-	float test[] = { 1.0f, 4.0f, 3.0f, 5.0f };
-	node.SetInputs(ArrayToVector(test, 4));
-	std::cout << std::to_string(node.CallActivationFunction());
+	Neuron mainNeuron(TempTest);
+	Neuron testNeuron;
+	testNeuron.output = 5;
+	mainNeuron.AddInput(&testNeuron);
+	mainNeuron.Calculate();
+	std::cout << std::to_string(mainNeuron.output);
 
 	return 0;
 }

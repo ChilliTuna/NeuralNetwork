@@ -152,12 +152,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="DLLHandler.h" />
-    <ClInclude Include="Node.h" />
+    <ClInclude Include="Neuron.h" />
     <ClInclude Include="Test.h" />
-    <ClInclude Include="Tools.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Neuron.cpp" />
     <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
