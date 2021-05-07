@@ -12,6 +12,9 @@ class Neuron
 	std::vector<Neuron*> inputs;
 	std::vector<float> weights;
 
+	float staticInput = 0;
+	bool firstColumn = false;
+
 	float Summate();
 	float CallActivationFunction();
 
@@ -26,7 +29,8 @@ public:
 		SetActivationFunction(function);
 	}
 	
-	API void SetInput(std::vector<Neuron*> inputs, std::vector<float> weights);
+	API void SetInput(std::vector<Neuron*> inputs, std::vector<float> weights = { 1 });
+	API void SetInput(float input);
 
 	API void AddInput(Neuron* input, float weight = 1);
 	

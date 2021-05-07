@@ -13,6 +13,12 @@ void Neuron::SetInput(std::vector<Neuron*> inputs, std::vector<float> weights)
 	}
 }
 
+void Neuron::SetInput(float input)
+{
+	staticInput = input;
+	firstColumn = true;
+}
+
 void Neuron::AddInput(Neuron* input, float weight)
 {
 	inputs.push_back(input);
@@ -32,6 +38,10 @@ void Neuron::Calculate()
 
 float Neuron::Summate()
 {
+	if (firstColumn)
+	{
+		return staticInput;
+	}
 	float sum = 0;
 	for (int i = 0; i < inputs.size(); i++)
 	{
