@@ -8,7 +8,7 @@ void Neuron::SetInput(std::vector<Neuron*> inputs, std::vector<float> weights)
 	{
 		for (int i = weights.size(); i <= inputs.size(); i++)
 		{
-			weights.push_back(1);
+			this->weights.push_back(1);
 		}
 	}
 }
