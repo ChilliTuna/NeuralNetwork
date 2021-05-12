@@ -30,7 +30,7 @@ void NeuralNetwork::GenerateNetwork(std::vector<float> columnSizes, bool saturat
 	}
 }
 
-void NeuralNetwork::AddColumn(float size, bool saturate)
+void NeuralNetwork::AddColumn(short size, bool saturate)
 {
 	Column temp;
 	for (int j = 0; j < size; j++)
@@ -88,9 +88,9 @@ void NeuralNetwork::SetInputs(std::vector<float*> inputs)
 	}
 }
 
-void NeuralNetwork::ConnectNeurons(int from, int to, int fromColumn)
+void NeuralNetwork::ConnectNeurons(short from, short to, short fromColumn)
 {
-	if (fromColumn > network.size())
+	if (network.size() > fromColumn)
 	{
 		if (network[fromColumn].size() > from && network[fromColumn + 1].size() > to)
 		{
@@ -107,6 +107,24 @@ void NeuralNetwork::ConnectNeurons(Neuron* from, Neuron* to)
 	}
 }
 
+void NeuralNetwork::ChangeWeight(short from, short to, short fromColumn, float newVal)
+{
+	if (ContainsIndex(from, fromColumn) && ContainsIndex(to, fromColumn + 1))
+	{
+		GetNeuron(to, fromColumn + 1)->ChangeWeight(GetNeuron(to, fromColumn), newVal);
+	}
+}
+
+void NeuralNetwork::ChangeWeight(Neuron* neuron, short synapseIndex, float newVal)
+{
+	neuron->ChangeWeight(synapseIndex, newVal);
+}
+
+void NeuralNetwork::ChangeWeight(Neuron* fromNeuron, Neuron* toNeuron, float newVal)
+{
+	toNeuron->ChangeWeight(fromNeuron, newVal);
+}
+
 bool NeuralNetwork::ContainsNeuron(Neuron* checkNeuron)
 {
 	for (int i = 0; i < network.size(); i++)
@@ -120,6 +138,21 @@ bool NeuralNetwork::ContainsNeuron(Neuron* checkNeuron)
 		}
 	}
 	return false;
+}
+
+bool NeuralNetwork::ContainsIndex(short index, short column)
+{
+	if (network.size() > column && network[column].size() > index)
+	{
+		return true;
+	}
+	return false;
+}
+
+//UNSAFE!!! Ensure neuron exists BEFORE calling
+Neuron* NeuralNetwork::GetNeuron(short index, short column)
+{
+	return network[column][index];
 }
 
 std::vector<float> NeuralNetwork::GetOutputs()

@@ -17,12 +17,17 @@ public:
 	API void Update();
 
 	API void GenerateNetwork(std::vector<float> columnSizes, bool saturate = true);
-	API void AddColumn(float size, bool saturate = true);
+	API void AddColumn(short size, bool saturate = true);
 	API void AddNeuron(Neuron* newNeuron, short column, bool saturate = false);
 	API void SetInputs(std::vector<float> inputs);
 	API void SetInputs(std::vector<float*> inputs);
-	API void ConnectNeurons(int from, int to, int fromColumn);
+	API void ConnectNeurons(short from, short to, short fromColumn);
 	API void ConnectNeurons(Neuron* from, Neuron* to);
+	API void ChangeWeight(short from, short to, short fromColumn, float newVal);
+	API void ChangeWeight(Neuron* neuron, short neuronIndex, float newVal);
+	API void ChangeWeight(Neuron* fromNeuron, Neuron* toNeuron, float newVal);
 	API bool ContainsNeuron(Neuron* checkNeuron);
+	API bool ContainsIndex(short index, short column);
+	API Neuron* GetNeuron(short index, short column);
 	API std::vector<float> GetOutputs();
 };

@@ -30,12 +30,15 @@ public:
 		SetActivationFunction(function);
 	}
 	
-	API void SetInput(std::vector<Neuron*> inputs, std::vector<float> weights = { 1 });
+	API void SetInput(std::vector<Neuron*> inputs, std::vector<float> weights = {});
 	API void SetInput(float input);
 	API void SetInput(float* input);
 
 	API void AddInput(Neuron* input, float weight = 1);
 	
+	API void ChangeWeight(int index, float newVal);
+	API void ChangeWeight(Neuron* synapse, float newVal);
+
 	API void SetActivationFunction(ActivationFunction function);
 
 	API void Calculate();

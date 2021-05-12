@@ -23,9 +23,12 @@ int main()
 
 	NeuralNetwork brain;
 	brain.defaultFunc = TempTest;
-	brain.GenerateNetwork({ 1, 1 });
+	brain.GenerateNetwork({ 2, 1 });
 
-	std::vector<float> testInputs = { 78 };
+	float targetPos = 3;
+	float myPos = 9;
+
+	std::vector<float*> testInputs = { &targetPos, &myPos };
 	brain.SetInputs(testInputs);
 
 	brain.Update();

@@ -32,6 +32,25 @@ void Neuron::AddInput(Neuron* input, float weight)
 	weights.push_back(weight);
 }
 
+void Neuron::ChangeWeight(int index, float newVal)
+{
+	if (index < weights.size())
+	{
+		weights[index] = newVal;
+	}
+}
+
+void Neuron::ChangeWeight(Neuron* synapse, float newVal)
+{
+	for (int i = 0; i < inputs.size(); i++)
+	{
+		if (inputs[i] == synapse)
+		{
+			weights[i] = newVal;
+		}
+	}
+}
+
 void Neuron::SetActivationFunction(ActivationFunction function)
 {
 	actFunc = function;
@@ -59,5 +78,9 @@ float Neuron::Summate()
 
 float Neuron::CallActivationFunction()
 {
-	return actFunc(output);
+	if (actFunc != nullptr)
+	{
+		return actFunc(output);
+	}
+	return output;
 }
