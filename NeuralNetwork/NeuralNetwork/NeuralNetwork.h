@@ -27,7 +27,7 @@ public:
 	API void ChangeWeight(short from, short to, short fromColumn, float newVal);
 	API void ChangeWeight(Neuron* neuron, short neuronIndex, float newVal);
 	API void ChangeWeight(Neuron* fromNeuron, Neuron* toNeuron, float newVal);
-	API void AssignWeights(std::vector<std::vector<std::vector<float>>>* weights);
+	API void SetWeights(std::vector<std::vector<std::vector<float>>> weights);
 	API bool ContainsNeuron(Neuron* checkNeuron);
 	API bool ContainsIndex(short index, short column);
 	API Neuron* GetNeuron(short index, short column);

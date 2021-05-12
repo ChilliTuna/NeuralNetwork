@@ -19,7 +19,7 @@ int main()
 	//mainNeuron.Calculate();
 	//std::cout << std::to_string(mainNeuron.output) << std::endl;
 
-	std::vector<std::vector<std::vector<float>>> weights =
+	std::vector<std::vector<std::vector<float>>> weights = 
 	{
 		{{}},
 		{{-1}, {1}}
@@ -30,13 +30,16 @@ int main()
 
 	NeuralNetwork brain({ 2, 1 });
 
-	float targetPos = 3;
 	float myPos = 5;
+	float targetPos = 3;
 
 	std::vector<float*> testInputs = { &myPos, &targetPos };
 	brain.SetInputs(testInputs);
-	brain.AssignWeights(&weights);
-	//brain[1][0]->ChangeWeight(brain[0][0], -1);
+	brain.SetWeights(weights);
+	//brain[1][0]->ChangeWeight(brain[0][0], -1); 
+
+	//weights[1][0][0] = -2.0f;
+	//brain.SetWeights(weights);
 
 	brain.Update();
 	std::cout << "I need to move to the right by " << std::to_string(brain.GetOutputs()[0]) << std::endl;

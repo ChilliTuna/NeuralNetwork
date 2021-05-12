@@ -130,9 +130,9 @@ void NeuralNetwork::ChangeWeight(Neuron* fromNeuron, Neuron* toNeuron, float new
 	toNeuron->ChangeWeight(fromNeuron, newVal);
 }
 
-void NeuralNetwork::AssignWeights(std::vector<std::vector<std::vector<float>>>* weights)
+void NeuralNetwork::SetWeights(std::vector<std::vector<std::vector<float>>> weights)
 {
-	for (int i = 0; i < weights->size(); i++)
+	for (int i = 0; i < weights.size(); i++)
 	{
 		for (int j = 0; j < weights[i].size(); j++)
 		{
@@ -140,7 +140,7 @@ void NeuralNetwork::AssignWeights(std::vector<std::vector<std::vector<float>>>* 
 			{
 				if (ContainsIndex(j, i))
 				{
-					ChangeWeight(GetNeuron(j, i), k, (*weights)[i][j][k]);
+					ChangeWeight(GetNeuron(j, i), k, weights[i][j][k]);
 				}
 			}
 		}
