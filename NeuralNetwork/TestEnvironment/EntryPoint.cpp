@@ -19,6 +19,8 @@ int main()
 	//mainNeuron.Calculate();
 	//std::cout << std::to_string(mainNeuron.output) << std::endl;
 
+	TestDLL();
+
 	NeuralNetwork brain;
 	brain.defaultFunc = TempTest;
 	brain.GenerateNetwork({ 1, 1 });

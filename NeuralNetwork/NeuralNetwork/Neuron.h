@@ -13,6 +13,7 @@ class Neuron
 	std::vector<float> weights;
 
 	float staticInput = 0;
+	float* dynamicInput = nullptr;
 	bool firstColumn = false;
 
 	float Summate();
@@ -31,6 +32,7 @@ public:
 	
 	API void SetInput(std::vector<Neuron*> inputs, std::vector<float> weights = { 1 });
 	API void SetInput(float input);
+	API void SetInput(float* input);
 
 	API void AddInput(Neuron* input, float weight = 1);
 	
