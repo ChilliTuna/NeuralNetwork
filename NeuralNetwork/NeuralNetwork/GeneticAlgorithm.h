@@ -22,5 +22,6 @@ public:
 	API void CreateNewGen();
 	API void RandomiseWeights(NeuralNetwork* instancesToModify, float maxNegDif, float maxPosDif);
 	API void RandomiseAllWeights(float maxNegDif, float maxPosDif);
+	API void RunFitnessChecks(float (*fitnessFunc)(float), std::vector<float> checkVals);
 	API void Update();
 };

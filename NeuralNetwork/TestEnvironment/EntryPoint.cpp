@@ -27,21 +27,27 @@ int main()
 
 	TestDLL();
 
-	NeuralNetwork brain({ 2, 1 });
+	NeuralNetwork* brain = new NeuralNetwork({ 2, 1 });
 
 	float myPos = 5;
 	float targetPos = 3;
 
 	std::vector<float*> testInputs = { &myPos, &targetPos };
-	brain.SetInputs(testInputs);
-	brain.SetWeights(weights);
+	brain->SetInputs(testInputs);
+	brain->SetWeights(weights);
 	//brain[1][0]->ChangeWeight(brain[0][0], -1);
 
-	//weights[1][0][0] = -2.0f;
-	//brain.SetWeights(weights);
 
-	brain.Update();
-	std::cout << "I need to move to the right by " << std::to_string(brain.GetOutputs()[0]) << std::endl;
+	NeuralNetwork brain2electricboogaloo = *brain;
+
+	weights[1][0][0] = -2.0f;
+	brain->SetWeights(weights);
+
+	brain->Update();
+	brain2electricboogaloo.Update();
+
+	std::cout << "I need to move to the right by " << std::to_string(brain->GetOutputs()[0]) << std::endl;
+	std::cout << "I need to move to the right by " << std::to_string(brain2electricboogaloo.GetOutputs()[0]) << std::endl;
 
 	return 0;
 }
