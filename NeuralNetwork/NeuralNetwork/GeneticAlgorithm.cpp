@@ -35,9 +35,9 @@ void GeneticAlgorithm::RandomiseWeights(NeuralNetwork* instanceToModify, float n
 	{
 		for (int j = 0; j < instanceToModify->network[i].size(); j++)
 		{
-			for (int k = 0; k < instanceToModify->network[i][j]->GetWeightsCount(); k++)
+			for (int k = 0; k < instanceToModify->network[i][j].GetWeightsCount(); k++)
 			{
-				instanceToModify->network[i][j]->ChangeWeight(k, instanceToModify->network[i][j]->GetWeight(k) + distribution(engine));
+				instanceToModify->network[i][j].ChangeWeight(k, instanceToModify->network[i][j].GetWeight(k) + distribution(engine));
 			}
 		}
 	}

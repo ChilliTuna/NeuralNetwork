@@ -6,14 +6,13 @@ class NeuralNetwork
 {
 
 public:
-	typedef std::vector<Neuron*> Column;
+	typedef std::vector<Neuron> Column;
 	std::vector<Column> network;
 
 	ActivationFunction defaultFunc = nullptr;
 
 	API NeuralNetwork() {};
 	API NeuralNetwork(std::vector<short> columnSizes, bool saturate = true);
-	API ~NeuralNetwork();
 
 	API void Update();
 
@@ -32,6 +31,6 @@ public:
 	API bool ContainsIndex(short index, short column);
 	API Neuron* GetNeuron(short index, short column);
 	API std::vector<float> GetOutputs();
-	API std::vector<Neuron*> operator[](int index);
+	API std::vector<Neuron>* operator[](int index);
 
 };

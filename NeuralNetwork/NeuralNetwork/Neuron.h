@@ -31,7 +31,7 @@ public:
 		SetActivationFunction(function);
 	}
 	
-	API void SetInput(std::vector<Neuron*> inputs, std::vector<float> weights = {});
+	API void SetInput(std::vector<Neuron>* inputs, std::vector<float> weights = {});
 	API void SetInput(float input);
 	API void SetInput(float* input);
 

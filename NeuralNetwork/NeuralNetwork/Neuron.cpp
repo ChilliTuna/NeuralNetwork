@@ -1,12 +1,16 @@
 #include "Neuron.h"
 
-void Neuron::SetInput(std::vector<Neuron*> inputs, std::vector<float> weights)
+void Neuron::SetInput(std::vector<Neuron>* inputs, std::vector<float> weights)
 {
-	this->inputs = inputs;
-	this->weights = weights;
-	if (weights.size() < inputs.size())
+	this->inputs.clear();
+	for (int i = 0; i < inputs->size(); i++)
 	{
-		for (int i = weights.size(); i <= inputs.size(); i++)
+		this->inputs.push_back(&(*inputs)[i]);
+	}
+	this->weights = weights;
+	if (weights.size() < inputs->size())
+	{
+		for (int i = weights.size(); i <= inputs->size(); i++)
 		{
 			this->weights.push_back(1);
 		}

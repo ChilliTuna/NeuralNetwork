@@ -5,24 +5,13 @@ NeuralNetwork::NeuralNetwork(std::vector<short> columnSizes, bool saturate)
 	GenerateNetwork(columnSizes, saturate);
 }
 
-NeuralNetwork::~NeuralNetwork()
-{
-	for (int i = 0; i < network.size(); i++)
-	{
-		for (int j = 0; j < network[i].size(); j++)
-		{
-			delete network[i][j];
-		}
-	}
-}
-
 void NeuralNetwork::Update()
 {
 	for (int i = 0; i < network.size(); i++)
 	{
 		for (int j = 0; j < network[i].size(); j++)
 		{
-			network[i][j]->Calculate();
+			network[i][j].Calculate();
 		}
 	}
 }
@@ -42,17 +31,17 @@ void NeuralNetwork::AddColumn(short size, bool saturate)
 	{
 		if (defaultFunc != nullptr)
 		{
-			temp.push_back(new Neuron(defaultFunc));
+			temp.push_back(Neuron(defaultFunc));
 		}
 		else
 		{
-			temp.push_back(new Neuron());
+			temp.push_back(Neuron());
 		}
 		if (saturate)
 		{
 			if (network.size() > 0)
 			{
-				temp[j]->SetInput(network.back());
+				temp[j].SetInput(&network.back());
 			}
 		}
 	}
@@ -61,12 +50,12 @@ void NeuralNetwork::AddColumn(short size, bool saturate)
 
 void NeuralNetwork::AddNeuron(Neuron* newNeuron, short column, bool saturate)
 {
-	network[column].push_back(newNeuron);
+	network[column].push_back(*newNeuron);
 	if (saturate)
 	{
 		if (column > 0)
 		{
-			newNeuron->SetInput(network[column - 1]);
+			newNeuron->SetInput(&network[column - 1]);
 		}
 	}
 }
@@ -77,7 +66,7 @@ void NeuralNetwork::SetInputs(std::vector<float> inputs)
 	{
 		for (int i = 0; i < network[0].size(); i++)
 		{
-			network[0][i]->SetInput(inputs[i]);
+			network[0][i].SetInput(inputs[i]);
 		}
 	}
 }
@@ -88,7 +77,7 @@ void NeuralNetwork::SetInputs(std::vector<float*> inputs)
 	{
 		for (int i = 0; i < network[0].size(); i++)
 		{
-			network[0][i]->SetInput(inputs[i]);
+			network[0][i].SetInput(inputs[i]);
 		}
 	}
 }
@@ -99,7 +88,7 @@ void NeuralNetwork::ConnectNeurons(short from, short to, short fromColumn)
 	{
 		if (network[fromColumn].size() > from && network[fromColumn + 1].size() > to)
 		{
-			ConnectNeurons(network[fromColumn + 1][from], network[fromColumn][to]);
+			ConnectNeurons(&network[fromColumn + 1][from], &network[fromColumn][to]);
 		}
 	}
 }
@@ -153,7 +142,7 @@ bool NeuralNetwork::ContainsNeuron(Neuron* checkNeuron)
 	{
 		for (int j = 0; j < network[i].size(); j++)
 		{
-			if (network[i][j] == checkNeuron)
+			if (&network[i][j] == checkNeuron)
 			{
 				return true;
 			}
@@ -174,7 +163,7 @@ bool NeuralNetwork::ContainsIndex(short index, short column)
 //UNSAFE!!! Ensure neuron exists BEFORE calling
 Neuron* NeuralNetwork::GetNeuron(short index, short column)
 {
-	return network[column][index];
+	return &network[column][index];
 }
 
 std::vector<float> NeuralNetwork::GetOutputs()
@@ -182,12 +171,12 @@ std::vector<float> NeuralNetwork::GetOutputs()
 	std::vector<float> retVec;
 	for (int i = 0; i < network.back().size(); i++)
 	{
-		retVec.push_back(network.back()[i]->output);
+		retVec.push_back(network.back()[i].output);
 	}
 	return retVec;
 }
 
-std::vector<Neuron*> NeuralNetwork::operator[](int index)
+std::vector<Neuron>* NeuralNetwork::operator[](int index)
 {
-	return network[index];
+	return &network[index];
 }
