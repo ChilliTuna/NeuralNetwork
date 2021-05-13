@@ -32,6 +32,20 @@ void Neuron::AddInput(Neuron* input, float weight)
 	weights.push_back(weight);
 }
 
+short Neuron::GetWeightsCount()
+{
+	return weights.size();
+}
+
+API float Neuron::GetWeight(short index)
+{
+	if (index < GetWeightsCount())
+	{
+		return weights[index];
+	}
+	return NULL;
+}
+
 void Neuron::ChangeWeight(int index, float newVal)
 {
 	if (index < weights.size())

@@ -24,6 +24,7 @@ public:
 
 	float output = 0;
 
+
 	Neuron() {}
 	Neuron(ActivationFunction function)
 	{
@@ -35,6 +36,9 @@ public:
 	API void SetInput(float* input);
 
 	API void AddInput(Neuron* input, float weight = 1);
+	
+	API short GetWeightsCount();
+	API float GetWeight(short index);
 	
 	API void ChangeWeight(int index, float newVal);
 	API void ChangeWeight(Neuron* synapse, float newVal);

@@ -2,7 +2,6 @@
 #include <string>
 
 #include "Test.h"
-#include "Neuron.h"
 #include "NeuralNetwork.h"
 
 float TempTest(float in)
@@ -12,6 +11,7 @@ float TempTest(float in)
 
 int main()
 {
+	srand(time(0));
 	//Neuron mainNeuron(TempTest);
 	//Neuron testNeuron;
 	//testNeuron.output = 5;
@@ -19,12 +19,11 @@ int main()
 	//mainNeuron.Calculate();
 	//std::cout << std::to_string(mainNeuron.output) << std::endl;
 
-	std::vector<std::vector<std::vector<float>>> weights = 
+	std::vector<std::vector<std::vector<float>>> weights =
 	{
 		{{}},
 		{{-1}, {1}}
 	};
-
 
 	TestDLL();
 
@@ -36,7 +35,7 @@ int main()
 	std::vector<float*> testInputs = { &myPos, &targetPos };
 	brain.SetInputs(testInputs);
 	brain.SetWeights(weights);
-	//brain[1][0]->ChangeWeight(brain[0][0], -1); 
+	//brain[1][0]->ChangeWeight(brain[0][0], -1);
 
 	//weights[1][0][0] = -2.0f;
 	//brain.SetWeights(weights);
