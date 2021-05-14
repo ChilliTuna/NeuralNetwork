@@ -3,15 +3,20 @@
 
 #include "Test.h"
 #include "NeuralNetwork.h"
+#include "GeneticAlgorithm.h"
 
 float TempTest(float in)
 {
 	return in * 10;
 }
 
+float TestFitFunc(std::vector<float> vals)
+{
+	return vals[0] / vals[1];
+}
+
 int main()
 {
-	srand(time(0));
 	//Neuron mainNeuron(TempTest);
 	//Neuron testNeuron;
 	//testNeuron.output = 5;
@@ -19,35 +24,46 @@ int main()
 	//mainNeuron.Calculate();
 	//std::cout << std::to_string(mainNeuron.output) << std::endl;
 
-	std::vector<std::vector<std::vector<float>>> weights =
-	{
-		{{}},
-		{{-1}, {1}}
-	};
-
 	TestDLL();
 
-	NeuralNetwork* brain = new NeuralNetwork({ 2, 1 });
+	NeuralNetwork* brain = new NeuralNetwork({ 4, 4, 1 });
 
-	float myPos = 5;
-	float targetPos = 3;
+	float myPosX = 0;
+	float myPosY = 0;
+	float targetPosX = 3;
+	float targetPosY = 4;
 
-	std::vector<float*> testInputs = { &myPos, &targetPos };
+	std::vector<float*> testInputs = { &myPosX, &myPosY, &targetPosX, &targetPosY };
 	brain->SetInputs(testInputs);
-	brain->SetWeights(weights);
-	//brain[1][0]->ChangeWeight(brain[0][0], -1);
 
+	GeneticAlgorithm genePool;
 
-	NeuralNetwork brain2electricboogaloo = *brain;
+	genePool.originalNetwork = brain;
 
-	weights[1][0][0] = -2.0f;
-	brain->SetWeights(weights);
+	genePool.CreateFirstGen();
 
-	brain->Update();
-	brain2electricboogaloo.Update();
+	genePool.CompletelyRandomiseWeights(-10, 10);
 
-	std::cout << "I need to move to the right by " << std::to_string(brain->GetOutputs()[0]) << std::endl;
-	std::cout << "I need to move to the right by " << std::to_string(brain2electricboogaloo.GetOutputs()[0]) << std::endl;
+	genePool.fitnessFunc = TestFitFunc;
 
+	while (true)
+	{
+		char string[10];
+		std::cin >> string;
+
+		genePool.Update();
+
+		std::vector<std::vector<float>> outputs;
+		
+		for (int i = 0; i < genePool.instanceCount; i++)
+		{
+			std::vector<float> out = { genePool.instances[i].GetOutputs()[0], 5 };
+			outputs.push_back(out);
+			std::cout << "brain # " << i << " thinks the distance is: " << std::to_string(genePool.instances[i].GetOutputs()[0]) << std::endl;
+		}
+
+		genePool.RunGenerationalGuantlet(outputs);
+		genePool.CreateNewGen();
+	}
 	return 0;
 }

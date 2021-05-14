@@ -7,6 +7,7 @@ void GeneticAlgorithm::CreateFirstGen()
 	for (int i = 0; i < instanceCount; i++)
 	{
 		instances.push_back(*originalNetwork);
+		instances[i].Saturate();
 	}
 }
 
@@ -22,6 +23,10 @@ void GeneticAlgorithm::CreateNewGen()
 				instances.push_back(nextGenProgenitors[i]);
 			}
 		}
+	}
+	for (int i = 0; i < instanceCount; i++)
+	{
+		instances[i].Saturate();
 	}
 	RandomiseAllWeights(generationalVariance / 2 - generationalVariance, generationalVariance / 2 + generationalVariance);
 	generationCount++;
@@ -51,11 +56,31 @@ void GeneticAlgorithm::RandomiseAllWeights(float negGeneticDif, float posGenetic
 	}
 }
 
-//Checks the fitness of all NeuralNetworks in this genetic algorithm, the order of checkVals should match the order of their respective networks in the instances vector
-void GeneticAlgorithm::RunFitnessChecks(float(*fitnessFunc)(float), std::vector<float> checkVals)
+void GeneticAlgorithm::CompletelyRandomiseWeights(float min, float max)
 {
+	std::mt19937 engine(1729);
+	std::uniform_real_distribution<float> distribution(min, max);
+	for (int i = 0; i < instances.size(); i++)
+	{
+		for (int j = 0; j < instances[i].network.size(); j++)
+		{
+			for (int k = 0; k < instances[i].network[j].size(); k++)
+			{
+				for (int l = 0; l < instances[i].network[j][k].GetWeightsCount(); l++)
+				{
+					instances[i].network[j][k].ChangeWeight(l, instances[i].network[j][k].GetWeight(l) + distribution(engine));
+				}
+			}
+		}
+	}
+}
+
+//Checks the fitness of all NeuralNetworks in this genetic algorithm, the order of checkVals should match the order of their respective networks in the instances vector
+void GeneticAlgorithm::RunGenerationalGuantlet(std::vector<std::vector<float>> checkVals)
+{
+
 	std::vector<NeuralNetwork> sortedNetworks;
-	std::vector<float> networkPerformances;
+	std::vector<float> networkPerformances; 
 	if (instanceCount > 0)
 	{
 		sortedNetworks.push_back(instances[0]);

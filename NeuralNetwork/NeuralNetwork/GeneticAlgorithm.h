@@ -11,10 +11,13 @@ public:
 
 	std::vector<NeuralNetwork> nextGenProgenitors;
 
+	//Higher values are considered better
+	float(*fitnessFunc)(std::vector<float>);
+
 	int generationCount = 0;
 
-	float instanceCount;
-	float breedersCount;
+	float instanceCount = 10;
+	float breedersCount = 2;
 
 	float generationalVariance = 1;
 
@@ -22,6 +25,7 @@ public:
 	API void CreateNewGen();
 	API void RandomiseWeights(NeuralNetwork* instancesToModify, float maxNegDif, float maxPosDif);
 	API void RandomiseAllWeights(float maxNegDif, float maxPosDif);
-	API void RunFitnessChecks(float (*fitnessFunc)(float), std::vector<float> checkVals);
+	API void CompletelyRandomiseWeights(float min, float max);
+	API void RunGenerationalGuantlet(std::vector<std::vector<float>> checkVals);
 	API void Update();
 };

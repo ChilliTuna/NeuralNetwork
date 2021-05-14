@@ -26,6 +26,14 @@ void NeuralNetwork::GenerateNetwork(std::vector<short> columnSizes, bool saturat
 
 void NeuralNetwork::AddColumn(short size, bool saturate)
 {
+	std::vector<Neuron*> prevCol;
+	if (network.size() > 0)
+	{
+		for (int i = 0; i < network.back().size(); i++)
+		{
+			prevCol.push_back(&(network.back()[i]));
+		}
+	}
 	Column temp;
 	for (int j = 0; j < size; j++)
 	{
@@ -41,7 +49,7 @@ void NeuralNetwork::AddColumn(short size, bool saturate)
 		{
 			if (network.size() > 0)
 			{
-				temp[j].SetInput(&network.back());
+				temp[j].SetInput(prevCol);
 			}
 		}
 	}
@@ -55,7 +63,12 @@ void NeuralNetwork::AddNeuron(Neuron* newNeuron, short column, bool saturate)
 	{
 		if (column > 0)
 		{
-			newNeuron->SetInput(&network[column - 1]);
+			std::vector<Neuron*> prevCol;
+			for (int i = 0; i < network[column - 1].size(); i++)
+			{
+				prevCol.push_back(&(network[column - 1][i]));
+			}
+			newNeuron->SetInput(prevCol);
 		}
 	}
 }
@@ -86,7 +99,7 @@ void NeuralNetwork::ConnectNeurons(short from, short to, short fromColumn)
 {
 	if (network.size() > fromColumn)
 	{
-		if (network[fromColumn].size() > from && network[fromColumn + 1].size() > to)
+		if (network[fromColumn].size() > from&& network[fromColumn + 1].size() > to)
 		{
 			ConnectNeurons(&network[fromColumn + 1][from], &network[fromColumn][to]);
 		}
@@ -98,6 +111,22 @@ void NeuralNetwork::ConnectNeurons(Neuron* from, Neuron* to)
 	if (ContainsNeuron(from) && ContainsNeuron(to))
 	{
 		to->AddInput(from);
+	}
+}
+
+void NeuralNetwork::Saturate()
+{
+	for (int i = 1; i < network.size(); i++)
+	{
+		std::vector<Neuron*> prevCol;
+		for (int j = 0; j < network[i - 1].size(); j++)
+		{
+			prevCol.push_back(&network[i - 1][j]);
+		}
+		for (int j = 0; j < network[i].size(); j++)
+		{
+			network[i][j].SetInput(prevCol);
+		}
 	}
 }
 
@@ -153,7 +182,7 @@ bool NeuralNetwork::ContainsNeuron(Neuron* checkNeuron)
 
 bool NeuralNetwork::ContainsIndex(short index, short column)
 {
-	if (network.size() > column && network[column].size() > index)
+	if (network.size() > column&& network[column].size() > index)
 	{
 		return true;
 	}

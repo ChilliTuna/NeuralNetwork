@@ -23,6 +23,7 @@ public:
 	API void SetInputs(std::vector<float*> inputs);
 	API void ConnectNeurons(short from, short to, short fromColumn);
 	API void ConnectNeurons(Neuron* from, Neuron* to);
+	API void Saturate();
 	API void ChangeWeight(short from, short to, short fromColumn, float newVal);
 	API void ChangeWeight(Neuron* neuron, short neuronIndex, float newVal);
 	API void ChangeWeight(Neuron* fromNeuron, Neuron* toNeuron, float newVal);
