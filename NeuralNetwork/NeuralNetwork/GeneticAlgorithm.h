@@ -9,7 +9,7 @@ public:
 	NeuralNetwork* originalNetwork;
 	std::vector<NeuralNetwork> instances;
 
-	std::vector<NeuralNetwork> nextGenProgenitors;
+	std::vector<NeuralNetwork*> nextGenProgenitors;
 
 	//Higher values are considered better
 	float(*fitnessFunc)(std::vector<float>);
@@ -27,5 +27,6 @@ public:
 	API void RandomiseAllWeights(float maxNegDif, float maxPosDif);
 	API void CompletelyRandomiseWeights(float min, float max);
 	API void RunGenerationalGuantlet(std::vector<std::vector<float>> checkVals);
+	API void RunFitnessFunc(std::vector<std::vector<float>> checkVals);
 	API void Update();
 };

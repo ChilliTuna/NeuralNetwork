@@ -11,6 +11,8 @@ public:
 
 	ActivationFunction defaultFunc = nullptr;
 
+	float fitness = 0;
+
 	API NeuralNetwork() {};
 	API NeuralNetwork(std::vector<short> columnSizes, bool saturate = true);
 

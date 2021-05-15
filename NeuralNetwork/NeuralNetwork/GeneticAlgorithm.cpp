@@ -20,7 +20,7 @@ void GeneticAlgorithm::CreateNewGen()
 		{
 			if (instances.size() < instanceCount)
 			{
-				instances.push_back(nextGenProgenitors[i]);
+				instances.push_back(*nextGenProgenitors[i]);
 			}
 		}
 	}
@@ -78,29 +78,31 @@ void GeneticAlgorithm::CompletelyRandomiseWeights(float min, float max)
 //Checks the fitness of all NeuralNetworks in this genetic algorithm, the order of checkVals should match the order of their respective networks in the instances vector
 void GeneticAlgorithm::RunGenerationalGuantlet(std::vector<std::vector<float>> checkVals)
 {
-
-	std::vector<NeuralNetwork> sortedNetworks;
-	std::vector<float> networkPerformances; 
-	if (instanceCount > 0)
-	{
-		sortedNetworks.push_back(instances[0]);
-		networkPerformances.push_back(fitnessFunc(checkVals[0]));
-	}
-	float fitness;
+	RunFitnessFunc(checkVals);
+	std::vector<NeuralNetwork*> order;
 	for (int i = 0; i < instanceCount; i++)
 	{
-		fitness = fitnessFunc(checkVals[i]);
-		for (int j = 0; j < sortedNetworks.size(); j++)
+
+	}
+	for (int i = 0; i < breedersCount; i++)
+	{
+
+	}
+}
+
+void GeneticAlgorithm::RunFitnessFunc(std::vector<std::vector<float>> checkVals)
+{
+	for (int i = 0; i < instanceCount; i++)
+	{
+		if (i < checkVals.size())
 		{
-			if (fitness < networkPerformances[j])
-			{
-				sortedNetworks.insert(sortedNetworks.begin() + j, instances[i]);
-				networkPerformances.insert(networkPerformances.begin() + j, fitness);
-				break;
-			}
+			instances[i].fitness = fitnessFunc(checkVals[i]);
+		}
+		else
+		{
+			instances[i].fitness = 0;
 		}
 	}
-	nextGenProgenitors = sortedNetworks;
 }
 
 void GeneticAlgorithm::Update()
