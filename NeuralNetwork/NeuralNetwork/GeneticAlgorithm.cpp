@@ -1,5 +1,10 @@
 #include "GeneticAlgorithm.h"
-#include <random>
+
+GeneticAlgorithm::GeneticAlgorithm()
+{
+	std::random_device rd;
+	engine = std::mt19937(rd());
+}
 
 void GeneticAlgorithm::CreateFirstGen()
 {
@@ -20,21 +25,24 @@ void GeneticAlgorithm::CreateNewGen()
 		{
 			if (instances.size() < instanceCount)
 			{
-				instances.push_back(*nextGenProgenitors[i]);
+				instances.push_back(nextGenProgenitors[i]);
 			}
 		}
+	}
+	while(instances.size() < instanceCount)
+	{
+		instances.push_back(nextGenProgenitors[0]);
 	}
 	for (int i = 0; i < instanceCount; i++)
 	{
 		instances[i].Saturate();
 	}
-	RandomiseAllWeights(generationalVariance / 2 - generationalVariance, generationalVariance / 2 + generationalVariance);
+	RandomiseAllWeights(generationalVariance / 2 - generationalVariance, generationalVariance / 2);
 	generationCount++;
 }
 
 void GeneticAlgorithm::RandomiseWeights(NeuralNetwork* instanceToModify, float negGeneticDif, float posGeneticDif)
 {
-	std::mt19937 engine(1729);
 	std::uniform_real_distribution<float> distribution(negGeneticDif, posGeneticDif);
 	for (int i = 0; i < instanceToModify->network.size(); i++)
 	{
@@ -82,11 +90,13 @@ void GeneticAlgorithm::RunGenerationalGuantlet(std::vector<std::vector<float>> c
 	std::vector<NeuralNetwork*> order;
 	for (int i = 0; i < instanceCount; i++)
 	{
-
+		order.push_back(&instances[i]);
 	}
+	std::sort(order.begin(), order.end(), [](NeuralNetwork* a, NeuralNetwork* b) {return a->fitness > b->fitness; });
+	nextGenProgenitors.clear();
 	for (int i = 0; i < breedersCount; i++)
 	{
-
+		nextGenProgenitors.push_back(*order[i]);
 	}
 }
 
@@ -111,4 +121,15 @@ void GeneticAlgorithm::Update()
 	{
 		instances[i].Update();
 	}
+}
+
+void GeneticAlgorithm::ChangeInputs(std::vector<float> in)
+{
+	//if (instanceCount > 0)
+	//{
+	//	for (int i = 0; i < instanceCount; i++)
+	//	{
+	//		ins
+	//	}
+	//}
 }

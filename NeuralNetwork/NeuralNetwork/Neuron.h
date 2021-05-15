@@ -39,6 +39,7 @@ public:
 	
 	API short GetWeightsCount();
 	API float GetWeight(short index);
+	API std::vector<float> GetWeights();
 	
 	API void ChangeWeight(int index, float newVal);
 	API void ChangeWeight(Neuron* synapse, float newVal);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Neuron.h"
+#include <string>
 
 class NeuralNetwork
 {
@@ -9,12 +10,12 @@ public:
 	typedef std::vector<Neuron> Column;
 	std::vector<Column> network;
 
-	ActivationFunction defaultFunc = nullptr;
-
 	float fitness = 0;
 
+	ActivationFunction defaultFunc = nullptr;
+
 	API NeuralNetwork() {};
-	API NeuralNetwork(std::vector<short> columnSizes, bool saturate = true);
+	API NeuralNetwork(std::vector<short> columnSizes, bool saturate = true, ActivationFunction defaultFunc = nullptr);
 
 	API void Update();
 

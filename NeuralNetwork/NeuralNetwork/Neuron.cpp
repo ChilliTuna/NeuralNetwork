@@ -6,7 +6,7 @@ void Neuron::SetInput(std::vector<Neuron*> inputs, std::vector<float> weights)
 	this->weights = weights;
 	if (weights.size() < inputs.size())
 	{
-		for (int i = weights.size(); i <= inputs.size(); i++)
+		for (int i = weights.size(); i < inputs.size(); i++)
 		{
 			this->weights.push_back(1);
 		}
@@ -44,6 +44,11 @@ API float Neuron::GetWeight(short index)
 		return weights[index];
 	}
 	return NULL;
+}
+
+API std::vector<float> Neuron::GetWeights()
+{
+	return weights;
 }
 
 void Neuron::ChangeWeight(int index, float newVal)

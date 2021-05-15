@@ -1,8 +1,9 @@
 #include "NeuralNetwork.h"
 
-NeuralNetwork::NeuralNetwork(std::vector<short> columnSizes, bool saturate)
+NeuralNetwork::NeuralNetwork(std::vector<short> columnSizes, bool saturate, ActivationFunction defaultFunc)
 {
 	GenerateNetwork(columnSizes, saturate);
+	this->defaultFunc = defaultFunc;
 }
 
 void NeuralNetwork::Update()
@@ -125,7 +126,7 @@ void NeuralNetwork::Saturate()
 		}
 		for (int j = 0; j < network[i].size(); j++)
 		{
-			network[i][j].SetInput(prevCol);
+			network[i][j].SetInput(prevCol, network[i][j].GetWeights());
 		}
 	}
 }
