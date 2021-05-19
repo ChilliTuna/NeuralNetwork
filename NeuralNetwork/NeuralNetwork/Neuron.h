@@ -11,7 +11,7 @@ class Neuron
 
 	std::vector<Neuron*> inputs;
 	std::vector<float> weights;
-
+	
 	float staticInput = 0;
 	float* dynamicInput = nullptr;
 	bool firstColumn = false;

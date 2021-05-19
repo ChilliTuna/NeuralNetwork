@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 #include <string>
 
 #include "Test.h"
@@ -36,8 +37,11 @@ int main()
 
 	float myPosX = 0;
 	float myPosY = 0;
-	float targetPosX = 6;
-	float targetPosY = 8;
+
+	//std::vector<std::vector<float>> = {{3,4},{},{},{}}
+
+	float targetPosX = 3;
+	float targetPosY = 4;
 	float targetVal = (float)sqrt(pow(targetPosX, 2) + pow(targetPosY, 2));
 
 	std::vector<float*> testInputs = { &myPosX, &myPosY, &targetPosX, &targetPosY };
@@ -57,18 +61,16 @@ int main()
 
 	genePool.breedersCount = 30;
 
-	genePool.generationalVariance = 0.001f;
+	genePool.generationalVariance = 0.01f;
 
 	int i = 0;
-	while (i < 1000)
+	while (i < 100)
 	{
-		//if (i % 50 == 0)
-		//{
-		//	targetPosX = rand() % 5;
-		//	targetPosY = rand() % 5;
-		//	targetVal = (float)sqrt(pow(targetPosX, 2) + pow(targetPosY, 2));
-		//}
 
+		for (int i = 0; i < testSets.size(); i++)
+		{
+
+		}
 		genePool.Update();
 
 		std::vector<std::vector<float>> outputs;

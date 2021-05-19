@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NeuralNetwork", "NeuralNetwork\NeuralNetwork.vcxproj", "{47205A6E-D19F-4F58-A84F-0CC8D6AEB6FD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestEnvironment", "TestEnvironment\TestEnvironment.vcxproj", "{D7DAEB85-4CB6-4AA4-9B0C-45E303AE7765}"
+	ProjectSection(ProjectDependencies) = postProject
+		{47205A6E-D19F-4F58-A84F-0CC8D6AEB6FD} = {47205A6E-D19F-4F58-A84F-0CC8D6AEB6FD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

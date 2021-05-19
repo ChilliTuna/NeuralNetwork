@@ -1,9 +1,13 @@
 #include "GeneticAlgorithm.h"
-
+#include <iostream>
 GeneticAlgorithm::GeneticAlgorithm()
 {
 	std::random_device rd;
+	std::cout << rd() << "  " << rd() << std::endl;
 	engine = std::mt19937(rd());
+	std::uniform_real_distribution<float> distribution(-1, 1);
+	
+	
 }
 
 void GeneticAlgorithm::CreateFirstGen()
@@ -66,7 +70,6 @@ void GeneticAlgorithm::RandomiseAllWeights(float negGeneticDif, float posGenetic
 
 void GeneticAlgorithm::CompletelyRandomiseWeights(float min, float max)
 {
-	std::mt19937 engine(1729);
 	std::uniform_real_distribution<float> distribution(min, max);
 	for (int i = 0; i < instances.size(); i++)
 	{

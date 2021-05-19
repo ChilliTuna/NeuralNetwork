@@ -26,6 +26,8 @@ public:
 	std::mt19937 engine;
 
 	API GeneticAlgorithm();
+	API GeneticAlgorithm(const GeneticAlgorithm& other) = delete;
+	API GeneticAlgorithm& operator=(const GeneticAlgorithm& other) = delete;
 	API void CreateFirstGen();
 	API void CreateNewGen();
 	API void RandomiseWeights(NeuralNetwork* instancesToModify, float maxNegDif, float maxPosDif);
