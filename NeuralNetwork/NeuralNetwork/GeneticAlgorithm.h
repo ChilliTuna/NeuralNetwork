@@ -12,7 +12,6 @@ public:
 
 	std::vector<NeuralNetwork> nextGenProgenitors;
 
-
 	//Higher values are considered better
 	float(*fitnessFunc)(std::vector<float>);
 
@@ -22,6 +21,8 @@ public:
 	int breedersCount = 2;
 
 	float generationalVariance = 0.1f;
+
+	NeuralNetwork best;
 
 	std::mt19937 engine;
 
@@ -35,6 +36,5 @@ public:
 	API void CompletelyRandomiseWeights(float min, float max);
 	API void RunGenerationalGuantlet(std::vector<std::vector<float>> checkVals);
 	API void RunFitnessFunc(std::vector<std::vector<float>> checkVals);
-	API void ChangeInputs(std::vector<float> in);
 	API void Update();
 };

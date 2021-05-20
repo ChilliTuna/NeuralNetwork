@@ -1,4 +1,5 @@
 #include "NeuralNetwork.h"
+#include <fstream>
 
 NeuralNetwork::NeuralNetwork(std::vector<short> columnSizes, bool saturate, ActivationFunction defaultFunc)
 {
@@ -196,14 +197,29 @@ Neuron* NeuralNetwork::GetNeuron(short index, short column)
 	return &network[column][index];
 }
 
+void NeuralNetwork::Save(std::string fileName)
+{
+	std::fstream stream;
+	stream.open(fileName.c_str(), std::ios::out | std::ios::binary);
+	stream.write(reinterpret_cast<char*>(this), sizeof(*this));
+	stream.close();
+}
+
 std::vector<float> NeuralNetwork::GetOutputs()
 {
-	std::vector<float> retVec;
-	for (int i = 0; i < network.back().size(); i++)
+	if (network.size() > 0)
 	{
-		retVec.push_back(network.back()[i].output);
+		if (network.back().size() > 0)
+		{
+			std::vector<float> retVec;
+			for (int i = 0; i < network.back().size(); i++)
+			{
+				retVec.push_back(network.back()[i].output);
+			}
+			return retVec;
+		}
 	}
-	return retVec;
+	return { 0 };
 }
 
 std::vector<Neuron>* NeuralNetwork::operator[](int index)

@@ -13,7 +13,7 @@ float TempTest(float in)
 
 float TestFitFunc(std::vector<float> vals)
 {
-	return (vals[1] < vals[0] ? vals[1] - vals[0] : vals[0] - vals[1]);
+	return (vals[1] < vals[0] ? vals[0] - vals[1] : vals[1] - vals[0]);
 }
 
 float FastSigmoid(float x)
@@ -38,7 +38,7 @@ int main()
 	float myPosX = 0;
 	float myPosY = 0;
 
-	//std::vector<std::vector<float>> = {{3,4},{},{},{}}
+	std::vector<std::vector<float>> testSets = { {3,4}, {6, 8}, {12, 16} };
 
 	float targetPosX = 3;
 	float targetPosY = 4;
@@ -49,7 +49,7 @@ int main()
 
 	GeneticAlgorithm genePool;
 
-	genePool.instanceCount = 100;
+	genePool.instanceCount = 50;
 
 	genePool.originalNetwork = brain;
 
@@ -59,47 +59,48 @@ int main()
 
 	genePool.fitnessFunc = TestFitFunc;
 
-	genePool.breedersCount = 30;
+	genePool.breedersCount = 5;
 
 	genePool.generationalVariance = 0.01f;
 
-	int i = 0;
-	while (i < 100)
+	int j = 0;
+	while (j < 10)
 	{
-
+		std::vector<float> results(genePool.instanceCount);
+		float target = 0;
 		for (int i = 0; i < testSets.size(); i++)
 		{
+			targetPosX = testSets[i][0];
+			targetPosY = testSets[i][1];
+			brain->SetInputs(testInputs);
+			targetVal = (float)sqrt(pow(targetPosX, 2) + pow(targetPosY, 2));
+			target += targetVal;
 
+			genePool.Update();
+
+			for (int i = 0; i < genePool.instanceCount; i++)
+			{
+				results[i] += genePool.instances[i].GetOutputs()[0];
+			}
 		}
-		genePool.Update();
-
 		std::vector<std::vector<float>> outputs;
-
 		for (int i = 0; i < genePool.instanceCount; i++)
 		{
-			std::vector<float> out = { genePool.instances[i].GetOutputs()[0], targetVal };
-			outputs.push_back(out);
-			std::cout << "brain # " << i << /*" with an ID of:" << genePool.instances[i].ID <<*/ " thinks the distance is: " << std::to_string(genePool.instances[i].GetOutputs()[0]) << " | Target val: " << std::to_string(targetVal) << std::endl;
+			outputs.push_back({ results[i], target });
+			std::cout << "brain # " << i << " thinks the sum of the distances are: " << outputs[i][0] << " | Target val: " << std::to_string(target) << std::endl;
 		}
 		std::cout << std::endl;
 
 		genePool.RunGenerationalGuantlet(outputs);
-		genePool.CreateNewGen();
-		i++;
+		if (j < 199)
+		{
+			genePool.CreateNewGen();
+		}
+		j++;
 	}
-	//-------
-	genePool.Update();
-	std::vector<std::vector<float>> outputs;
-	for (int i = 0; i < genePool.instanceCount; i++)
-	{
-		std::vector<float> out = { genePool.instances[i].GetOutputs()[0], 5 };
-		outputs.push_back(out);
-		std::cout << "brain # " << i << " thinks the distance is: " << std::to_string(genePool.instances[i].GetOutputs()[0]) << std::endl;
-	}
-	std::cout << std::endl;
-	genePool.RunGenerationalGuantlet(outputs);
-	std::cout << "best value: " << std::to_string(genePool.nextGenProgenitors[0].GetOutputs()[0]) << std::endl;
-	std::cout << "target value: " << std::to_string(targetVal) << std::endl;
+
+	genePool.nextGenProgenitors[0].Save("testPotato.dat");
+
 	//-------
 
 	return 0;

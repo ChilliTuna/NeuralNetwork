@@ -95,7 +95,11 @@ void GeneticAlgorithm::RunGenerationalGuantlet(std::vector<std::vector<float>> c
 	{
 		order.push_back(&instances[i]);
 	}
-	std::sort(order.begin(), order.end(), [](NeuralNetwork* a, NeuralNetwork* b) {return a->fitness > b->fitness; });
+	std::sort(order.begin(), order.end(), [](NeuralNetwork* a, NeuralNetwork* b) {return a->fitness < b->fitness; });
+	if (order[0]->fitness < best.fitness || best.fitness == 0)
+	{
+		best = *order[0];
+	}
 	nextGenProgenitors.clear();
 	for (int i = 0; i < breedersCount; i++)
 	{
@@ -124,15 +128,4 @@ void GeneticAlgorithm::Update()
 	{
 		instances[i].Update();
 	}
-}
-
-void GeneticAlgorithm::ChangeInputs(std::vector<float> in)
-{
-	//if (instanceCount > 0)
-	//{
-	//	for (int i = 0; i < instanceCount; i++)
-	//	{
-	//		ins
-	//	}
-	//}
 }

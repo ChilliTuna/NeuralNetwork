@@ -34,6 +34,8 @@ public:
 	API bool ContainsNeuron(Neuron* checkNeuron);
 	API bool ContainsIndex(short index, short column);
 	API Neuron* GetNeuron(short index, short column);
+	API void Save(std::string fileName);
+	API NeuralNetwork Load(std::string fileName);
 	API std::vector<float> GetOutputs();
 	API std::vector<Neuron>* operator[](int index);
 
