@@ -54,9 +54,23 @@ int main()
 
 	if (mode == "learn")
 	{
-		NeuralNetwork* brain = new NeuralNetwork({ 4, 4, 1 }, true);
+		NeuralNetwork* brain = new NeuralNetwork({4, 4, 1 }, true);
 
-		std::vector<std::vector<float>> testSets = { {5, 2, -3.024f, -1}, {-8.3f, 3, 9.93f, -8}, {-2.2f, 19, 3.5f, 16}, {1.854, 85.2, -25, -80} };
+		std::vector<std::vector<float>> testSets =
+		{
+		{5, 2, -3.024f, -1},
+		{0, 0, 48.4f, -23},
+		{-10, -3, -5, -1}, 
+		{-12, -5, -1.5f, 34}, 
+		{54.3f, 78, -45.6f, 76}, 
+		{-8.3f, 3, 9.93f, -8}, 
+		{-2.2f, 19, 3.5f, 16}, 
+		{1.854f, 85.2f, -25, -80}, 
+		{84, 6, -1, 4.21f}, 
+		{2.45f, -12.3f, 45, 90}, 
+		{95, 123.42f, -242, 65.432f},
+		{3.4f, -6.7f, 33, -9.8f}
+		};
 
 		float myPosX = 0;
 		float myPosY = 0;
@@ -69,7 +83,7 @@ int main()
 
 		GeneticAlgorithm genePool;
 
-		genePool.instanceCount = 50;
+		genePool.instanceCount = 1000;
 
 		genePool.originalNetwork = brain;
 
@@ -79,42 +93,55 @@ int main()
 
 		genePool.fitnessFunc = TestFitFunc;
 
-		genePool.breedersCount = 5;
+		genePool.breedersCount = 300;
 
-		genePool.generationalVariance = 0.001f;
+		genePool.generationalVariance = 1;
 
 		int j = 0;
-		while (j < 1000)
+		int generationCount = 4000;
+		while (j < generationCount)
 		{
 			std::vector<float> results(genePool.instanceCount);
 			float target = 0;
+
 			for (int i = 0; i < testSets.size(); i++)
 			{
+				results[i] = 0;
 				myPosX = testSets[i][0];
 				myPosY = testSets[i][1];
 				targetPosX = testSets[i][2];
 				targetPosY = testSets[i][3];
-				brain->SetInputs(testInputs);
-				targetVal = (float)sqrt(pow(targetPosX - myPosX, 2) + pow(targetPosY - myPosY, 2));
-				target += targetVal;
+				float xDiff = myPosX - targetPosX;
+				float yDiff = myPosY - targetPosY;
+				targetVal = (float)sqrt(xDiff * xDiff + yDiff * yDiff);
+				//target += targetVal;
 
-				genePool.Update();
+				//brain->SetInputs(testInputs);
 
-				for (int i = 0; i < genePool.instanceCount; i++)
+				for (int k = 0; k < genePool.instanceCount; k++)
 				{
-					results[i] += genePool.instances[i].GetOutputs()[0];
+					genePool.instances[k].SetInputs(testInputs);
+				}
+				genePool.Update();
+				for (int k = 0; k < genePool.instanceCount; k++)
+				{
+					float actualVal = genePool.instances[k].GetOutputs()[0];
+					results[k] += std::abs(actualVal - targetVal);
 				}
 			}
 			std::vector<std::vector<float>> outputs;
+			float averageFitness = 0;
 			for (int i = 0; i < genePool.instanceCount; i++)
 			{
-				outputs.push_back({ results[i], target });
-				std::cout << "brain # " << i << " thinks the sum of the distances are: " << outputs[i][0] << " | Target val: " << std::to_string(target) << std::endl;
+				outputs.push_back({ results[i], 0 });
+				averageFitness += results[i];
+				//std::cout << "brain # " << i << " thinks the sum of the distances are: " << outputs[i][0] << " | Target val: " << std::to_string(target) << std::endl;
 			}
+			std::cout << "Average fitness " << averageFitness / genePool.instanceCount;
 			std::cout << std::endl;
 
 			genePool.RunGenerationalGuantlet(outputs);
-			if (j < 199)
+			if (j < generationCount - 1)
 			{
 				genePool.CreateNewGen();
 			}

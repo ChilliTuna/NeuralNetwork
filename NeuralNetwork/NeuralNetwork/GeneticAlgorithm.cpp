@@ -6,8 +6,6 @@ GeneticAlgorithm::GeneticAlgorithm()
 	std::cout << rd() << "  " << rd() << std::endl;
 	engine = std::mt19937(rd());
 	std::uniform_real_distribution<float> distribution(-1, 1);
-	
-	
 }
 
 void GeneticAlgorithm::CreateFirstGen()
@@ -33,7 +31,7 @@ void GeneticAlgorithm::CreateNewGen()
 			}
 		}
 	}
-	while(instances.size() < instanceCount)
+	while (instances.size() < instanceCount)
 	{
 		instances.push_back(nextGenProgenitors[0]);
 	}
@@ -52,10 +50,13 @@ void GeneticAlgorithm::RandomiseWeights(NeuralNetwork* instanceToModify, float n
 	{
 		for (int j = 0; j < instanceToModify->network[i].size(); j++)
 		{
-			for (int k = 0; k < instanceToModify->network[i][j].GetWeightsCount(); k++)
-			{
-				instanceToModify->network[i][j].ChangeWeight(k, instanceToModify->network[i][j].GetWeight(k) + distribution(engine));
-			}
+			std::uniform_real_distribution<float> chooseWeight(0, instanceToModify->network[i][j].GetWeightsCount());
+			short weight = chooseWeight(engine);
+			instanceToModify->network[i][j].ChangeWeight(weight, instanceToModify->network[i][j].GetWeight(weight) + distribution(engine));
+			//for (int k = chooseWeight(engine); k < instanceToModify->network[i][j].GetWeightsCount(); k++)
+			//{
+			//	instanceToModify->network[i][j].ChangeWeight(k, instanceToModify->network[i][j].GetWeight(k) + distribution(engine));
+			//}
 		}
 	}
 }
