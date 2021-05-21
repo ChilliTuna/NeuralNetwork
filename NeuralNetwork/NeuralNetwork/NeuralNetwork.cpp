@@ -197,12 +197,86 @@ Neuron* NeuralNetwork::GetNeuron(short index, short column)
 	return &network[column][index];
 }
 
-void NeuralNetwork::Save(std::string fileName)
+//Saves weights, biases and dimensions of this NeuralNetwork
+void NeuralNetwork::Save(std::string fullFileName)
 {
-	std::fstream stream;
-	stream.open(fileName.c_str(), std::ios::out | std::ios::binary);
-	stream.write(reinterpret_cast<char*>(this), sizeof(*this));
+	std::ofstream stream;
+	stream.open(fullFileName.c_str(), std::ios::out | std::ios::binary);
+	std::vector<short> dims = GetDimensions();
+	short dimSize = dims.size();
+	stream.write((char*)&dimSize, sizeof(short));
+	stream.write((char*)dims.data(), dimSize * sizeof(short));
+	for (int i = 0; i < dimSize; i++)
+	{
+		for (int j = 0; j < dims[i]; j++)
+		{
+			short weightCount = network[i][j].GetWeightsCount();
+			stream.write((char*)&weightCount, sizeof(short));
+			for (int k = 0; k < weightCount; k++)
+			{
+				float weight = network[i][j].GetWeight(k);
+				stream.write((char*)&weight, sizeof(float));
+			}
+			stream.write((char*)&network[i][j].bias, sizeof(float));
+		}
+	}
 	stream.close();
+}
+
+//Loads weights, biases and dimensions of this NeuralNetwork. Returned network needs to be re-saturated
+NeuralNetwork NeuralNetwork::Load(std::string fullFileName)
+{
+	NeuralNetwork retNet;
+	std::ifstream stream;
+	stream.open(fullFileName.c_str(), std::ios::in | std::ios::binary);
+	short dimSize = 0;
+	std::vector<short> dims;
+	stream.read((char*)&dimSize, sizeof(short));
+	for (int i = 0; i < dimSize; i++)
+	{
+		short singleDim = 0;
+		stream.read((char*)&singleDim, sizeof(short));
+		dims.push_back(singleDim);
+	}
+	retNet.GenerateNetwork(dims);
+	std::vector<std::vector<std::vector<float>>> columns;
+	for (int i = 0; i < dimSize; i++)
+	{
+		std::vector<std::vector<float>> neurons;
+		for (int j = 0; j < dims[i]; j++)
+		{
+			std::vector<float> weights;
+			short weightCount = 0;
+			stream.read((char*)&weightCount, sizeof(short));
+			for (int k = 0; k < weightCount; k++)
+			{
+				float weight = 0;
+				stream.read((char*)&weight, sizeof(float));
+				weights.push_back(weight);
+			}
+			stream.read((char*)&retNet.network[i][j].bias, sizeof(float));
+			neurons.push_back(weights);
+		}
+		columns.push_back(neurons);
+	}
+	retNet.SetWeights(columns);
+	return retNet;
+}
+
+std::vector<short> NeuralNetwork::GetDimensions()
+{
+	std::vector<short> retVec;
+
+	for (int i = 0; i < network.size(); i++)
+	{
+		short colSize = 0;
+		for (int j = 0; j < network[i].size(); j++)
+		{
+			colSize++;
+		}
+		retVec.push_back(colSize);
+	}
+	return retVec;
 }
 
 std::vector<float> NeuralNetwork::GetOutputs()
